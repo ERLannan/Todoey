@@ -10,11 +10,16 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
-    var itemArray = ["Feed Dog", "Walk Dog", "Do some work", "Boxing Workout"]
+    var itemArray = [String]()
+    //    var itemArray = ["Feed Dog", "Walk Dog", "Do some work", "Boxing Workout"]
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        if let items = defaults.array(forKey: "TodoItemArray") as? [String] {
+            itemArray = items
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,14 +48,13 @@ class TodoListViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         
-        let alert = UIAlertController(title: "Add new Todo",
-                                      message: "",
-                                      preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add new Todo", message: "", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             if(textField.text!.count > 3) {
                 self.itemArray.append(textField.text!)
+                self.defaults.set(self.itemArray, forKey: "TodoItemArray")
                 self.tableView.reloadData()
             } else {
                 textField.placeholder = "Must be more longer than 3 characters"
