@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
     
     var itemArray = [TodoItem]()
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
-
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,30 +21,26 @@ class TodoListViewController: UITableViewController {
     }
     
     
-    //MARK - Save Load Data
-    func loadTodoData() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                itemArray = try decoder.decode([TodoItem].self, from: data)
-            } catch {
-                print("Error decoding data")
-            }
+    //MARK: - Save/Load Data
+    func loadTodoData(with request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()) {
+        do {
+            itemArray = try context.fetch(request)
+            self.tableView.reloadData()
+        } catch {
+            print("Error fetching data from context")
         }
     }
     
     func saveTodoData() {
-        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to:dataFilePath!)
+            try context.save()
+            self.tableView.reloadData()
         } catch {
-            print("Error encoding item array: \(error)")
+            print("Error saving context: \(error)")
         }
     }
     
-    
-    //MARK - TableView methods
+    //MARK: - TableView methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
@@ -58,15 +55,17 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-            cell.accessoryType = itemArray[indexPath.row].done ? .checkmark : .none
-            tableView.deselectRow(at: indexPath, animated: true)
-            saveTodoData()
-        }
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
+//            context.delete(itemArray[indexPath.row])
+//            itemArray.remove(at: indexPath.row)
+
+        saveTodoData()
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //MARK - Add new items
+    //MARK: - Add new items
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         
@@ -74,15 +73,12 @@ class TodoListViewController: UITableViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            if(textField.text!.count > 3) {
-                let newTodo = TodoItem()
+                let newTodo = TodoItem(context: self.context )
                 newTodo.title = textField.text!
+                newTodo.done = false
                 self.itemArray.append(newTodo)
                 self.saveTodoData()
-                self.tableView.reloadData()
-            } else {
-                textField.placeholder = "Must be more longer than 3 characters"
-            }
+            textField.resignFirstResponder()
         }
         
         alert.addTextField { (alertTextField) in
@@ -91,6 +87,7 @@ class TodoListViewController: UITableViewController {
             alertTextField.addTarget(self, action: #selector(self.textChanged(sender:)), for: .editingChanged)
             
             textField = alertTextField
+            textField.becomeFirstResponder()
         }
         
         action.isEnabled = false
@@ -112,3 +109,28 @@ class TodoListViewController: UITableViewController {
     }
 }
 
+//MARK: - SearchBar methods
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        searchBar.resignFirstResponder()
+        loadTodoData(with: request)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchBar.text?.count == 0) {
+            loadTodoData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()                
+            }
+        } else {
+            let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+            request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+            loadTodoData(with: request)
+        }
+    }
+}
