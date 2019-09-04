@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07EF74CC2315AD0F000C3D4D /* Todoy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07EF74CC2315AD0F000C3D4D /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EF74CF2315AD0F000C3D4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07EF74D12315AD0F000C3D4D /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		07EF74D42315AD0F000C3D4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		07EF74CD2315AD0F000C3D4D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				07EF74CC2315AD0F000C3D4D /* Todoy.app */,
+				07EF74CC2315AD0F000C3D4D /* Todoey.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,9 +105,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		07EF74CB2315AD0F000C3D4D /* Todoy */ = {
+		07EF74CB2315AD0F000C3D4D /* Todoey */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 07EF74DE2315AD10000C3D4D /* Build configuration list for PBXNativeTarget "Todoy" */;
+			buildConfigurationList = 07EF74DE2315AD10000C3D4D /* Build configuration list for PBXNativeTarget "Todoey" */;
 			buildPhases = (
 				07EF74C82315AD0F000C3D4D /* Sources */,
 				07EF74C92315AD0F000C3D4D /* Frameworks */,
@@ -117,9 +117,9 @@
 			);
 			dependencies = (
 			);
-			name = Todoy;
+			name = Todoey;
 			productName = Todoy;
-			productReference = 07EF74CC2315AD0F000C3D4D /* Todoy.app */;
+			productReference = 07EF74CC2315AD0F000C3D4D /* Todoey.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -137,7 +137,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 07EF74C72315AD0F000C3D4D /* Build configuration list for PBXProject "Todoy" */;
+			buildConfigurationList = 07EF74C72315AD0F000C3D4D /* Build configuration list for PBXProject "Todoey" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -150,7 +150,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				07EF74CB2315AD0F000C3D4D /* Todoy */,
+				07EF74CB2315AD0F000C3D4D /* Todoey */,
 			);
 		};
 /* End PBXProject section */
@@ -329,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ericlannan.autolayoutCalc.Todoy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericlannan.autolayoutCalc.Todoey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -347,7 +347,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ericlannan.autolayoutCalc.Todoy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericlannan.autolayoutCalc.Todoey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -357,7 +357,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		07EF74C72315AD0F000C3D4D /* Build configuration list for PBXProject "Todoy" */ = {
+		07EF74C72315AD0F000C3D4D /* Build configuration list for PBXProject "Todoey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07EF74DC2315AD10000C3D4D /* Debug */,
@@ -366,7 +366,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		07EF74DE2315AD10000C3D4D /* Build configuration list for PBXNativeTarget "Todoy" */ = {
+		07EF74DE2315AD10000C3D4D /* Build configuration list for PBXNativeTarget "Todoey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07EF74DF2315AD10000C3D4D /* Debug */,
