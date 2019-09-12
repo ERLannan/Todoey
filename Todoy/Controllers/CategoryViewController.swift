@@ -8,15 +8,23 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
 
     var categoryArray:Results<Category>?
     let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         load()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.barTintColor = .darkGray
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(.darkGray, returnFlat: true)]
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -28,6 +36,7 @@ class CategoryViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.backgroundColor = RandomFlatColorWithShade(.dark).hexValue()//UIColor.randomFlat.hexValue()
             self.save(category: newCategory)
             textField.resignFirstResponder()
         }
@@ -56,7 +65,7 @@ class CategoryViewController: UITableViewController {
         var resp : UIResponder = tf
         while !(resp is UIAlertController) { resp = resp.next! }
         let alert = resp as! UIAlertController
-        (alert.actions[1] as UIAlertAction).isEnabled = (tf.text!.count > 3)
+        (alert.actions[1] as UIAlertAction).isEnabled = (tf.text!.count > 2)
     
     }
     
@@ -76,12 +85,26 @@ class CategoryViewController: UITableViewController {
         }
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        if let category = self.categoryArray?[indexPath.row] {
+            do{
+                try self.realm.write {
+                    self.realm.delete(category)
+                }
+            } catch {
+                print("Error saving Categories: \(error)")
+            }
+        }
+    }
     //MARK: - TableView Datasource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        let category = categoryArray?[indexPath.row]
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.textLabel?.text = category?.name ?? "No Categories added yet"
+        if let category = categoryArray?[indexPath.row] {
+            cell.backgroundColor = UIColor(hexString: category.backgroundColor )
+            cell.textLabel?.text = category.name
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+        }
         
         return cell
     }
@@ -94,7 +117,7 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
         
-//        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
